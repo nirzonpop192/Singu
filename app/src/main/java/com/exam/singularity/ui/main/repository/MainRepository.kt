@@ -1,7 +1,7 @@
-package com.exam.singularity.ui.repository
+package com.exam.singularity.ui.main.repository
 
 import com.exam.singularity.remote.ErrorResponse
-import com.exam.singularity.ui.model.StoreResponse
+import com.exam.singularity.ui.main.model.StoreResponse
 import com.haroldadmin.cnradapter.NetworkResponse
 
 interface MainRepository {

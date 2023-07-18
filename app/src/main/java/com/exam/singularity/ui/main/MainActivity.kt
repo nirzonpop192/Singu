@@ -1,4 +1,4 @@
-package com.exam.singularity.ui
+package com.exam.singularity.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

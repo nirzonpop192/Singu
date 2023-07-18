@@ -1,4 +1,4 @@
-package com.exam.singularity.ui.model
+package com.exam.singularity.ui.main.model
 
 
 import kotlinx.serialization.SerialName

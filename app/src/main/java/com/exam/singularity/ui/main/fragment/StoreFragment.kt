@@ -1,4 +1,4 @@
-package com.exam.singularity.ui.fragment
+package com.exam.singularity.ui.main.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

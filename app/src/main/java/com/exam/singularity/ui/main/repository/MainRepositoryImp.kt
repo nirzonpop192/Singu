@@ -1,4 +1,4 @@
-package com.exam.singularity.ui.repository
+package com.exam.singularity.ui.main.repository
 
 import com.exam.singularity.remote.apis.ApiServices
 import javax.inject.Inject
