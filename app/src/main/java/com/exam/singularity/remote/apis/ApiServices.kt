@@ -15,7 +15,7 @@ interface ApiServices {
 
 
     @GET("api/stores")
-    suspend fun getStores(): NetworkResponse<StoreResponse, ErrorResponse>
+    suspend fun getStores( @Query("page") page: Int = 1): NetworkResponse<StoreResponse, ErrorResponse>
 
 
 
