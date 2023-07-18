@@ -11,20 +11,12 @@ class AppApplication : Application() {
         @SuppressLint("StaticFieldLeak")
         // need to check internet from any where with out activityFragment
         var headContext: Context? = null
-//        var isBackground = true
-//        var isLoggedIn = false
-//        var prefs: Prefs? = null
 
-//        @SuppressLint("StaticFieldLeak")
-//        lateinit var instance: MyApplication
-//            private set
     }
 
     override fun onCreate() {
         super.onCreate()
         headContext = this.applicationContext
-//        instance = this
-//        prefs = Prefs(applicationContext)
 
     }
 }

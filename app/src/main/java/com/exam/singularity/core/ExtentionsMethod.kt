@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.util.Log
 import com.exam.singularity.AppApplication.Companion.headContext
 
 fun hasInternetConnection(): Boolean {
@@ -29,4 +30,8 @@ fun hasInternetConnection(): Boolean {
         }
     }
     return false
+}
+
+fun String.log(key: String = "LOG") {
+    Log.e(key, this)
 }
