@@ -1,7 +1,8 @@
-package com.exam.singularity
+package com.exam.singularity.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.exam.singularity.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -3,6 +3,10 @@ package com.exam.singularity.di
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.exam.singularity.remote.BaseUrl
+import com.exam.singularity.remote.apis.ApiServices
+import com.google.gson.GsonBuilder
+import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +17,10 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -52,5 +59,22 @@ class NetworkModule {
         return HttpLoggingInterceptor().apply {
             level =  HttpLoggingInterceptor.Level.BODY
         }
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BaseUrl.BASE_URL)
+            .addCallAdapterFactory(NetworkResponseAdapterFactory())
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create()))
+            .client(okHttpClient)
+            .build()
+    }
+
+
+    @Provides
+    fun provideAuthApiService(retrofit: Retrofit): ApiServices {
+        return retrofit.create(ApiServices::class.java)
     }
 }
