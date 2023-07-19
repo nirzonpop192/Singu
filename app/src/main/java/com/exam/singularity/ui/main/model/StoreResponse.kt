@@ -7,14 +7,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class StoreResponse(
     @SerialName("data")
-    var `data`: List<Data?>?,
+    var `data`: List<StoreDataModel>,
     @SerialName("links")
     var links: Links?,
     @SerialName("meta")
-    var meta: Meta?
+    var meta: Meta
 ) {
     @Serializable
-    data class Data(
+    data class StoreDataModel(
         @SerialName("address")
         var address: String?,
         @SerialName("id")

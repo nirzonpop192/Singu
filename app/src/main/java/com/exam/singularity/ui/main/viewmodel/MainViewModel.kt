@@ -3,6 +3,8 @@ package com.exam.singularity.ui.main.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.exam.singularity.remote.ErrorResponse
 import com.exam.singularity.ui.main.model.StoreResponse
 import com.exam.singularity.ui.main.repository.MainRepository
@@ -11,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,5 +33,15 @@ class MainViewModel @Inject constructor(
             _getStoresResult.emit(mainRepository.getStores(page))
         }
 
+    }
+
+
+    private var _getStoresPaggingResult = MutableSharedFlow<PagingData<StoreResponse.StoreDataModel>>()
+    var getStoresPaggingResult: Flow<PagingData<StoreResponse.StoreDataModel>> = _getStoresPaggingResult
+
+    fun getStoresPagging() = viewModelScope.launch {
+        mainRepository.getStoresPagging().cachedIn(viewModelScope).collectLatest {
+            _getStoresPaggingResult.emit(it)
+        }
     }
 }
