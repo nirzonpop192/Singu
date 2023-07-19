@@ -16,8 +16,7 @@ interface ApiServices {
 
     @GET("api/stores")
     suspend fun getStores( @Query("page") page: Int = 1): NetworkResponse<StoreResponse, ErrorResponse>
-
-
+    @Headers("Content-Type: application/json")
     @GET("api/stores")
     suspend fun getStoresTest( @Query("page") page: Int = 1): StoreResponse
 

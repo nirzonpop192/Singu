@@ -17,8 +17,8 @@ class MainRepositoryImp @Inject constructor(
     override fun getStoresPagging() =
         Pager(
             config = PagingConfig(
-                pageSize = 6,
-
+                pageSize = 10,
+                maxSize = 36,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { StoresPagingSource(apiClient) }
