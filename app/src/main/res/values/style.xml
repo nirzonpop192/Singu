@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextInputLayout.EdittextLayout3" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense" >
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxStrokeColor">@color/LightGrey</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="helperTextEnabled">true</item>
+
+        <item name="hintTextColor">@color/greyLight</item>
+    </style>
+
+</resources>

@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.exam.singularity.R
 import com.exam.singularity.core.BaseFragment
 import com.exam.singularity.core.listener.ItemOnClickListener
 import com.exam.singularity.databinding.FragmentStoreBinding
 import com.exam.singularity.ui.main.adapter.StoreAdapter
-import com.exam.singularity.ui.main.adapter.StorePaggingAdapter
 import com.exam.singularity.ui.main.model.StoreResponse
 import com.exam.singularity.ui.main.viewmodel.MainViewModel
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -62,18 +61,22 @@ class StoreFragment : BaseFragment() {
 
 
 
-        adapterStore.clickItem = object : ItemOnClickListener<StoreResponse.StoreDataModel> {
-            override fun onClick(data: StoreResponse.StoreDataModel) {
 
-
-            }
-        }
 //        mainViewModel.getStoresPagging()
         mainViewModel.getStores(1)
 
     }
 
     override fun observeClickEvents() {
+        adapterStore.clickItem = object : ItemOnClickListener<StoreResponse.StoreDataModel> {
+            override fun onClick(data: StoreResponse.StoreDataModel) {
+
+                findNavController().navigate(R.id.submitFragment)
+            }
+        }
+    }
+
+    override fun observeViewModelEvents() {
         lifecycleScope.launch {
             mainViewModel.getStoresResult.collectLatest {
                 when (it) {
@@ -94,9 +97,5 @@ class StoreFragment : BaseFragment() {
 //
 //            }
 //        }
-    }
-
-    override fun observeViewModelEvents() {
-
     }
 }

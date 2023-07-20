@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import com.exam.singularity.AppApplication.Companion.headContext
 
 fun hasInternetConnection(): Boolean {
@@ -34,4 +35,7 @@ fun hasInternetConnection(): Boolean {
 
 fun String.log(key: String = "LOG") {
     Log.e(key, this)
+}
+fun String.toast(context: Context, show: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(context, this, show).show()
 }
