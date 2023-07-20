@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.exam.singularity.R
 import com.exam.singularity.core.BaseFragment
+import com.exam.singularity.core.hasInternetConnection
 import com.exam.singularity.core.listener.ItemOnClickListener
+import com.exam.singularity.core.toast
 import com.exam.singularity.databinding.FragmentStoreBinding
 import com.exam.singularity.ui.main.adapter.StoreAdapter
 import com.exam.singularity.ui.main.model.StoreResponse
@@ -25,6 +27,8 @@ import kotlinx.coroutines.launch
 class StoreFragment : BaseFragment() {
 
     private lateinit var binding: FragmentStoreBinding
+
+    private var mPage=1
 
     private val mainViewModel by activityViewModels<MainViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +51,7 @@ class StoreFragment : BaseFragment() {
     lateinit var adapterStore: StoreAdapter
     override fun setUpView(savedInstanceState: Bundle?) {
 
-//        mainViewModel.getStores(1)
+
         adapterStore = StoreAdapter(requireContext())
         binding.rvStore.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.rvStore.adapter = adapterStore
@@ -60,12 +64,31 @@ class StoreFragment : BaseFragment() {
 //        }
 
 
-
-
 //        mainViewModel.getStoresPagging()
-        mainViewModel.getStores(1)
+        if (hasInternetConnection())
+            mainViewModel.getStores(1)
+
+        binding.rvStore.addOnScrollListener( object :
+            RecyclerView.OnScrollListener(){
+
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)){
+                   if ( mainViewModel.isReadyToLoad.value==true){
+                       mPage++
+                       mainViewModel.getStores(mPage)
+                   }
+                }
+            }
+
+
+        })
+
+
 
     }
+
 
     override fun observeClickEvents() {
         adapterStore.clickItem = object : ItemOnClickListener<StoreResponse.StoreDataModel> {
@@ -81,7 +104,12 @@ class StoreFragment : BaseFragment() {
             mainViewModel.getStoresResult.collectLatest {
                 when (it) {
                     is NetworkResponse.Success -> {
+                        if (adapterStore.modelList.isEmpty())
                         adapterStore.submitData(ArrayList(it.body.data))
+                        else
+                            adapterStore.updateData(ArrayList(it.body.data))
+
+                        mainViewModel.isReadyToLoad.value = it.body.links?.next !=null
                     }
                     is NetworkResponse.Error -> {
 

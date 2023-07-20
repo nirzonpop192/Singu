@@ -24,6 +24,13 @@ class StoreAdapter(val context: Context) :
         modelList = list
         notifyDataSetChanged()
     }
+    fun updateData(list: ArrayList<StoreDataModel>) {
+        list.onEach { element->
+            modelList.add(element)
+        }
+
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(val binding: RowItemStoreSelectBinding) :
         RecyclerView.ViewHolder(binding.root)

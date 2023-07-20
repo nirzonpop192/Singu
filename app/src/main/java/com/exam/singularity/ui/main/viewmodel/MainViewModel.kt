@@ -1,6 +1,7 @@
 package com.exam.singularity.ui.main.viewmodel
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -29,6 +30,7 @@ class MainViewModel @Inject constructor(
     var getStoresResult: Flow<NetworkResponse<StoreResponse, ErrorResponse>> =
         _getStoresResult
 
+    var isReadyToLoad = MutableLiveData<Boolean>()
     fun getStores(page: Int) {
         viewModelScope.launch {
             _getStoresResult.emit(mainRepository.getStores(page))
