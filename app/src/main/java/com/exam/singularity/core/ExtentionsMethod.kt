@@ -36,6 +36,6 @@ fun hasInternetConnection(): Boolean {
 fun String.log(key: String = "LOG") {
     Log.e(key, this)
 }
-fun String.toast(context: Context, show: Int = Toast.LENGTH_SHORT) {
+fun String.toast(context: Context, show: Int = Toast.LENGTH_LONG) {
     Toast.makeText(context, this, show).show()
 }

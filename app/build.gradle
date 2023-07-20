@@ -87,4 +87,7 @@ dependencies {
 
     implementation "androidx.paging:paging-runtime:$paging_version"
 
+    //ulid generator
+    implementation "com.aallam.ulid:ulid-kotlin:1.2.1"
+
 }

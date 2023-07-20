@@ -14,11 +14,16 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.exam.singularity.core.BaseFragment
 import com.exam.singularity.core.log
 import com.exam.singularity.core.toast
 import com.exam.singularity.databinding.FragmentSubmitBinding
 import com.exam.singularity.ui.main.viewmodel.MainViewModel
+import com.haroldadmin.cnradapter.NetworkResponse
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import ulid.ULID
 
 
 class SubmitFragment : BaseFragment(), LocationListener {
@@ -28,6 +33,8 @@ class SubmitFragment : BaseFragment(), LocationListener {
     private lateinit var locationManager: LocationManager
     private lateinit var tvGpsLocation: TextView
     private val locationPermissionCode = 2
+    private var mLatitude = 0.0
+    private var mLongitude = 0.0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,21 +49,51 @@ class SubmitFragment : BaseFragment(), LocationListener {
     }
 
     override fun observeClickEvents() {
+        binding.btnSubmit.setOnClickListener {
+            setAttendance()
 
+        }
+    }
+    private fun setAttendance(){
+        val _name=binding.edtName.text.toString()
+        val _userId=binding.edtUserId.text.toString()
+        val _requestId=ULID.randomULID()
+        if (validate(_name,_userId,mLatitude,mLongitude)){
+            mainViewModel.setAttendance(_name,_userId.toInt(),mLatitude,mLongitude,_requestId)
+        }
     }
 
     override fun observeViewModelEvents() {
+        lifecycleScope.launch {
+            mainViewModel.setAttendanceResult.collectLatest {
+                when (it) {
+                    is NetworkResponse.Success -> {
+                      it.body.user_message?.toast(requireContext())
+                    }
+                    is NetworkResponse.Error -> {
 
+                    }
+                }
+            }
+        }
+    }
+
+    private fun validate(name:String, userId:String, lat:Double, lon:Double): Boolean {
+        if (name.isEmpty())
+            return false
+        else if (userId.isEmpty())
+            return false
+        else if(lat==0.0)
+            return false
+        else if (lon==0.0)
+            return false
+        return true
     }
 
     private fun getLocation() {
         locationManager =
             requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if ((ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED)
-        ) {
+        if (checkLocationPermission()) {
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -66,10 +103,19 @@ class SubmitFragment : BaseFragment(), LocationListener {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
     }
 
+    fun checkLocationPermission(): Boolean {
+        return (ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED)
+    }
+
     override fun onLocationChanged(location: Location) {
 
         var gpsLocation: String =
             "Latitude: " + location.latitude + " , Longitude: " + location.longitude
+        mLatitude = location.latitude
+        mLongitude = location.longitude
         gpsLocation.log("dim")
     }
 
@@ -82,6 +128,7 @@ class SubmitFragment : BaseFragment(), LocationListener {
         if (requestCode == locationPermissionCode) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 "Permission Granted".toast(requireContext())
+                getLocation()
             } else {
                 "Permission Denied".toast(requireContext())
             }

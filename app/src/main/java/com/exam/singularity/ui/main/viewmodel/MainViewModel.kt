@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.exam.singularity.remote.ErrorResponse
+import com.exam.singularity.ui.main.model.AttendanceResponse
 import com.exam.singularity.ui.main.model.StoreResponse
 import com.exam.singularity.ui.main.repository.MainRepository
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -35,6 +36,20 @@ class MainViewModel @Inject constructor(
 
     }
 
+    private var _setAttendance =
+        MutableSharedFlow<NetworkResponse<AttendanceResponse, ErrorResponse>>()
+    var setAttendanceResult: Flow<NetworkResponse<AttendanceResponse, ErrorResponse>> =
+        _setAttendance
+    fun setAttendance( name: String,
+                       userId: Int,
+                       latitude: Double,
+                       longitude: Double,
+                       request_id: String) {
+        viewModelScope.launch {
+            _setAttendance.emit(mainRepository.setAttendance(name,userId,latitude,longitude,request_id))
+        }
+
+    }
 
     private var _getStoresPaggingResult = MutableSharedFlow<PagingData<StoreResponse.StoreDataModel>>()
     var getStoresPaggingResult: Flow<PagingData<StoreResponse.StoreDataModel>> = _getStoresPaggingResult
