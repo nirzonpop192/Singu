@@ -56,15 +56,7 @@ class StoreFragment : BaseFragment() {
         binding.rvStore.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.rvStore.adapter = adapterStore
 
-//        lifecycleScope.launch {
-//            adapterStore.loadStateFlow.collectLatest { loadStates ->
-////                bottomProductBinding.loaderAnimation.isVisible = loadStates.refresh is LoadState.Loading
-//                binding.rvStore.isVisible != loadStates.refresh is LoadState.Loading
-//            }
-//        }
 
-
-//        mainViewModel.getStoresPagging()
         if (hasInternetConnection())
             mainViewModel.getStores(1)
 

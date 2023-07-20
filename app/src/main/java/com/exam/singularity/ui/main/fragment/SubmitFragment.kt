@@ -13,8 +13,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.exam.singularity.R
 import com.exam.singularity.core.BaseFragment
 import com.exam.singularity.core.log
 import com.exam.singularity.core.toast
@@ -31,7 +33,7 @@ class SubmitFragment : BaseFragment(), LocationListener {
 
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var locationManager: LocationManager
-    private lateinit var tvGpsLocation: TextView
+
     private val locationPermissionCode = 2
     private var mLatitude = 0.0
     private var mLongitude = 0.0
@@ -79,14 +81,32 @@ class SubmitFragment : BaseFragment(), LocationListener {
     }
 
     private fun validate(name:String, userId:String, lat:Double, lon:Double): Boolean {
+        val errorColor= ContextCompat.getColor(requireContext(), R.color.Red)
+        val normalColor= ContextCompat.getColor(requireContext(), R.color.black)
+        binding.tiName.setBoxStrokeColor(normalColor)
+        binding.tiUserId.setBoxStrokeColor(normalColor)
+        binding.layoutErrorName.isVisible=false
+        binding.layoutErrorId.isVisible=false
         if (name.isEmpty())
+        {
+            binding.tiName.setBoxStrokeColor(errorColor)
+            binding.layoutErrorName.isVisible=true
+            binding.tiName.isFocusable=true
             return false
-        else if (userId.isEmpty())
+        }
+
+        else if (userId.isEmpty()){
+            binding.tiUserId.setBoxStrokeColor(errorColor)
+            binding.layoutErrorId.isVisible=true
+            binding.tiName.isFocusable=true
+
             return false
+        }
         else if(lat==0.0)
             return false
         else if (lon==0.0)
             return false
+
         return true
     }
 
